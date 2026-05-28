@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Calculadora de Área Quadrada</title>
+</head>
+
+<body>
+    <h1>Calculadora de Área Quadrada</h1>
+    <input id="base" type="number" placeholder="Medida da Base (metro)">
+    <label>X</label>
+    <input id="altura" type="number" placeholder="Medida da Altura (metro)">
+    <button onclick="multiplicar()">Calcular Área</button>
+    <p>
+    <div id="exibirResultado"></div>
+
+</body>
+
+<script>
+    function multiplicar() {
+        let n1 = parseFloat(document.getElementById("base").value);
+        let n2 = parseFloat(document.getElementById("altura").value);
+        if (isNaN(n1) || isNaN(n2)) {
+            document.getElementById("exibirResultado").innerHTML =
+                "Por favor, digite números válidos.";
+        } else {
+            document.getElementById("exibirResultado").innerHTML =
+                "Resultado: " + (n1 * n2) + "m²";
+        }
+    }
+    
+</script>
+
+</html>
