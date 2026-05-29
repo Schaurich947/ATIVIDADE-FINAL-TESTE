@@ -14,22 +14,52 @@
     <button onclick="multiplicar()">Calcular Área</button>
     <p>
     <div id="exibirResultado"></div>
-
+    </p>
+    <p><button onclick="testesOperacao()">Testes Unitários</button></p>
+    <p><button onclick="testesComponente()">Testes de Componentes</button></p>
+    <div id="exibirTestesOperacao"></div>
+    <div id="exibirTestesComponente"></div>
 </body>
 
 <script>
     function multiplicar() {
-        let n1 = parseFloat(document.getElementById("base").value);
-        let n2 = parseFloat(document.getElementById("altura").value);
+        const n1 = parseFloat(document.getElementById("base").value);
+        const n2 = parseFloat(document.getElementById("altura").value);
         if (isNaN(n1) || isNaN(n2)) {
             document.getElementById("exibirResultado").innerHTML =
                 "Por favor, digite números válidos.";
+            return;
         } else {
             document.getElementById("exibirResultado").innerHTML =
                 "Resultado: " + (n1 * n2) + "m²";
         }
     }
-    
+    function fazAConta(numero1, numero2) {
+        return numero1 * numero2;
+    }
+    function testesOperacao() {
+        let resultadoDoTeste = fazAConta(2, 2);
+        if (resultadoDoTeste === 4) {
+            document.getElementById("exibirTestesOperacao").innerHTML = "Teste Unitário Passou ✅ (2x2 deu 4)";
+        } else {
+            document.getElementById("exibirTestesOperacao").innerHTML = "Teste Unitário Reprovou ❌";
+        }
+    }
+
+    function testesComponente() {
+        document.getElementById("base").value = 3;
+        document.getElementById("altura").value = 3;
+        multiplicar();
+        let mensagemNaTela = document.getElementById("exibirResultado").innerHTML;
+        if (mensagemNaTela === "Resultado: 9m²") {
+            document.getElementById("exibirTestesComponente").innerHTML = "Teste de Componente Passou ✅ (A tela mostrou 9m²)";
+        } else {
+            document.getElementById("exibirTestesComponente").innerHTML = "Teste de Componente Reprovou ❌";
+        }
+        document.getElementById("base").value = "";
+        document.getElementById("altura").value = "";
+    }
 </script>
+</body>
 
 </html>
