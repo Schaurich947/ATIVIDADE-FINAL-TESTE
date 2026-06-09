@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Calculadora de Área Quadrada e Juros Simples</title>
+</head>
+
+<body>
+
+    <h2>Calculadora de Área Quadrada</h2>
+    <input id="base" type="number" placeholder="Medida da Base (metro)">
+    <label>x</label>
+    <input id="altura" type="number" placeholder="Medida da Altura (metro)">
+    <button id="btnArea" onclick="multiplicar()">Calcular Área</button>
+    <div id="exibirResultadoMulti"></div>
+
+    <h2>Calculadora de Juros Simples</h2>
+    <input id="valorConta" type="number" placeholder="Valor da Conta">
+    <label>+</label>
+    <!-- CORRIGIDO: id="juros" renomeado para "taxaJuros" — evita conflito com a função juros() -->
+    <input id="taxaJuros" type="number" placeholder="Juros (%)">
+    <!-- CORRIGIDO: onclick="juros()" renomeado para "calcularJuros()" — evita conflito com id="juros" -->
+    <button id="btnJuros" onclick="calcularJuros()">Calcular Juros</button>
+    <div id="exibirResultadoJuro"></div>
+
+    <hr>
+
+    <button onclick="testesOperacao()">Testes Unitários</button>
+    <button onclick="testesComponente()">Testes de Componentes</button>
+    <div id="exibirTestesOperacao"></div>
+    <div id="exibirTestesComponente"></div>
+
+    <script>
+
+        // FUNÇÕES TESTES
+
+        function fazAContaMulti(numero1, numero2) {
+            return numero1 * numero2;
+        }
+
+        function fazAContaJuros(valorConta, taxaJuros) {
+            const juros = valorConta * (taxaJuros / 100);
+            const montante = valorConta + juros;
+            return { juros: juros, montante: montante };
+        }
+
+        // FUNÇÕES INTERFACE
+
+        function multiplicar() {
+            const n1 = parseFloat(document.getElementById("base").value);
+            const n2 = parseFloat(document.getElementById("altura").value);
+
+            if (isNaN(n1) || isNaN(n2)) {
+                document.getElementById("exibirResultadoMulti").innerHTML =
+                    "Por favor, digite números válidos.";
+                return;
+            }
+            if (n1 <= 0 || n2 <= 0) {
+                document.getElementById("exibirResultadoMulti").innerHTML =
+                    "Os valores devem ser maiores que zero.";
+                return;
+            }
+
+            document.getElementById("exibirResultadoMulti").innerHTML =
+                "Resultado: " + fazAContaMulti(n1, n2) + " m²";
+        }
+
+        function calcularJuros() {
+            const valorConta = parseFloat(document.getElementById("valorConta").value);
+            const taxaJuros = parseFloat(document.getElementById("taxaJuros").value);
+
+            if (isNaN(valorConta) || isNaN(taxaJuros)) {
+                document.getElementById("exibirResultadoJuro").innerHTML =
+                    "Por favor, digite números válidos.";
+                return;
+            }
+            if (valorConta <= 0 || taxaJuros <= 0) {
+                document.getElementById("exibirResultadoJuro").innerHTML =
+                    "Os valores devem ser maiores que zero.";
+                return;
+            }
+
+            const resultado = fazAContaJuros(valorConta, taxaJuros);
+            document.getElementById("exibirResultadoJuro").innerHTML =
+                "Juros: R$ " + resultado.juros.toFixed(2) +
+                " | Total: R$ " + resultado.montante.toFixed(2);
+        }
+
+        // TESTES UNITÁRIOS
+
+        function testesOperacao() {
+            let saida = "";
+
+            saida += fazAContaMulti(3, 3) === 9
+                ? "✅ Área: 3×3 = 9<br>"
+                : "❌ Área: 3×3 falhou<br>";
+
+            saida += fazAContaMulti(2, 2) === 4
+                ? "✅ Área: 2×2 = 4<br>"
+                : "❌ Área: 2×2 falhou<br>";
+
+            const j = fazAContaJuros(1000, 10);
+            saida += j.juros === 100
+                ? "✅ Juros: R$1000 a 10% = R$100<br>"
+                : "❌ Juros: R$1000 a 10% falhou<br>";
+
+            saida += j.montante === 1100
+                ? "✅ Montante: R$1000 + R$100 = R$1100<br>"
+                : "❌ Montante: falhou<br>";
+
+            document.getElementById("exibirTestesOperacao").innerHTML = saida;
+        }
+
+        // TESTES COMPONENTES
+
+        function testesComponente() {
+            let saida = "";
+
+            document.getElementById("base").value = 3;
+            document.getElementById("altura").value = 3;
+            multiplicar();
+            saida += document.getElementById("exibirResultadoMulti").innerHTML === "Resultado: 9 m²"
+                ? "✅ Tela área: mostrou 'Resultado: 9 m²'<br>"
+                : "❌ Tela área: obtido: '"
+                + document.getElementById("exibirResultadoMulti").innerHTML + "'<br>";
+
+            document.getElementById("base").value = "";
+            document.getElementById("altura").value = "";
+            multiplicar();
+            saida += document.getElementById("exibirResultadoMulti").innerHTML === "Por favor, digite números válidos."
+                ? "✅ Tela área: campos vazios bloqueados<br>"
+                : "❌ Tela área: campos vazios não bloqueados<br>";
+
+            document.getElementById("valorConta").value = 1000;
+            document.getElementById("taxaJuros").value = 10;
+            calcularJuros();
+            saida += document.getElementById("exibirResultadoJuro").innerHTML === "Juros: R$ 100.00 | Total: R$ 1100.00"
+                ? "✅ Tela juros: R$1000 a 10% correto<br>"
+                : "❌ Tela juros: obtido: '"
+                + document.getElementById("exibirResultadoJuro").innerHTML + "'<br>";
+
+            document.getElementById("base").value = "";
+            document.getElementById("altura").value = "";
+            document.getElementById("valorConta").value = "";
+            document.getElementById("taxaJuros").value = "";
+
+            document.getElementById("exibirTestesComponente").innerHTML = saida;
+        }
+
+    </script>
+
+</body>
+
+</html>
